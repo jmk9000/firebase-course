@@ -1,5 +1,7 @@
 
 
+
+
 import {Component, OnInit} from '@angular/core';
 import 'firebase/firestore';
 
@@ -67,6 +69,20 @@ export class AboutComponent {
                 }))
             })
     }
+
+    onReadCollectionGroup() {
+        this.db.collectionGroup(
+            'lessons',
+            ref => ref.where('seqNo', '==', 1)
+        ).get()
+        .subscribe(snapshots => {
+            console.log(snapshots.forEach(snap => {
+                console.log(snap.id);
+                console.log(snap.data());
+            }))
+        })
+    }
+
 }
 
 
