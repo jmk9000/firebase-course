@@ -7,7 +7,24 @@
        src="https://angular-university.s3-us-west-1.amazonaws.com/course-images/firebase-course-1.jpg">
 
 
-    <button mat-raised-button class="upload-btn" color="primary" (click)="uploadData()">Populate Database</button>
+    <button 
+    mat-raised-button class="upload-btn" 
+    color="primary" 
+    (click)="uploadData()">
+      Populate Database
+    </button>
+
+    <button 
+    mat-raised-button color="accent" 
+    (click)="onReadDoc()">
+      Read Doc
+    </button>
+
+    <button 
+    mat-raised-button color="warn" 
+    (click)="onReadCollection()">
+      Read Collection
+    </button>
 
 </div>
 

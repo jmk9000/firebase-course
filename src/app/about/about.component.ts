@@ -1,6 +1,6 @@
+
+
 import {Component, OnInit} from '@angular/core';
-
-
 import 'firebase/firestore';
 
 import {AngularFirestore} from '@angular/fire/firestore';
@@ -40,7 +40,33 @@ export class AboutComponent {
         return newData;
     }
 
+    onReadDoc() {
+        this.db.doc('/courses/2rVkH078k4A7YTteCALm')
+            .get()
+            .subscribe(snap => {
+                console.log(snap.id);
+                console.log(snap.data);
+            });
+    }
 
+    onReadCollection() {
+        this.db.collection(
+            'courses', 
+            //a combined query (two where field), will cause
+            //firebase to ask us to create an index
+            //check the console log for this error and a link 
+            //to where we can create an index
+            ref => ref.where('seqNo', '<=', 20)
+                    .where('url', '==', 'angular-forms-course')
+                    .orderBy('seqNo'))
+            .get()
+            .subscribe(snapshots => {
+                console.log(snapshots.forEach(snap => {
+                    console.log(snap.id);
+                    console.log(snap.data());
+                }))
+            })
+    }
 }
 
 
