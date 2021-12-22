@@ -43,11 +43,22 @@ export class AboutComponent {
     }
 
     onReadDoc() {
-        this.db.doc('/courses/2rVkH078k4A7YTteCALm')
-            .get()
+        this.db.doc('/courses/HsY3mKiGFqnBnZyNTVXJ')
+            //get is a shortlived observable,
+            //it gets one value and then completes
+            //.get()
+            //following two are long-lived observables
+            //snapshotChanges() changes "listens" for changes in the fsdb
+            //also works for collections
+            //.snapshotChanges()
+            //valueChanges() is maybe better than snapshot changes
+            //it doesn't grab the documentID, rather updates the object
+            //when a value updates
+            .valueChanges()
             .subscribe(snap => {
-                console.log(snap.id);
-                console.log(snap.data);
+                // console.log(snap.payload.id);
+                // console.log(snap.payload.data());
+                console.log(snap)
             });
     }
 
