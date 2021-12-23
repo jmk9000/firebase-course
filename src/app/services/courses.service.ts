@@ -6,10 +6,30 @@ import { map, concatMap } from 'rxjs/operators';
 import { convertSnaps } from './db-utils';
 import { Lesson } from '../model/lesson';
 
+import firebase from 'firebase';
+import OrderByDirection = firebase.firestore.OrderByDirection; 
+
 @Injectable({providedIn: 'root'})
 export class CoursesService {
         constructor(private db: AngularFirestore) {
 
+    }
+
+    findLessons(
+        courseId: string, 
+        sortOrder: OrderByDirection = 'asc',
+        pageNumber = 0,
+        pageSize = 3): Observable<Lesson[]> {
+        
+        return this.db.collection(`courses/${courseId}/lessons`,
+            ref => ref.orderBy('seqNo', sortOrder,)
+                .limit(pageSize)
+                .startAfter(pageNumber * pageSize)
+        )
+        .get()
+        .pipe(
+            map(results => convertSnaps<Lesson>(results))
+        )
     }
 
     //need to also allow to return observable of null
@@ -25,7 +45,6 @@ export class CoursesService {
                 })
             )
     }
-
 
     deleteCourseAndLessons(courseId: string) {
         return this.db.collection(`courses/${courseId}/lessons`)
