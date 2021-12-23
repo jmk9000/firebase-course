@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "firebase": "firebase",
-    "local-dev": "firebase emulators:start --only firestore,auth,functions --import test-data",
+    "local-dev": "firebase emulators:start --only firestore --import test-data",
     "empty-emulator": "firebase emulators:start",
     "emulator": "firebase emulators:start --import test-data",
     "export": "firebase emulators:export test-data"
@@ -30,6 +30,7 @@
     "firebase": "^8.2.6",
     "firebase-tools": "^6.11.0",
     "firebaseui": "^4.7.3",
+    "npm": "7.5.6",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
