@@ -16,11 +16,19 @@
         <mat-tab label="Beginners">
             <!-- provide the beginnersCourses$ observable and
             use the async pipe to subscribe to it -->
-            <courses-card-list [courses]='beginnersCourses$ | async'></courses-card-list>
+            <courses-card-list 
+            [courses]='beginnersCourses$ | async'
+            (courseEdited)="reloadCourses()"
+            (courseDeleted)="reloadCourses()"
+            ></courses-card-list>
         </mat-tab>
 
         <mat-tab label="Advanced">
-            <courses-card-list [courses]='advancedCourses$ | async'></courses-card-list>
+            <courses-card-list 
+            [courses]='advancedCourses$ | async'
+            (courseEdited)="reloadCourses()"
+            (courseDeleted)="reloadCourses()"
+            ></courses-card-list>
         </mat-tab>
 
     </mat-tab-group>

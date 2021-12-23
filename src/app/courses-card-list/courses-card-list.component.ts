@@ -1,3 +1,4 @@
+import { CoursesService } from './../services/courses.service';
 import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {Course} from "../model/course";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
@@ -24,7 +25,8 @@ export class CoursesCardListComponent implements OnInit {
 
     constructor(
       private dialog: MatDialog,
-      private router: Router) {
+      private router: Router,
+      private coursesService: CoursesService) {
     }
 
     ngOnInit() {
@@ -49,6 +51,22 @@ export class CoursesCardListComponent implements OnInit {
                 }
             });
 
+    }
+
+    onDeleteCourse(course: Course) {
+        this.coursesService.deleteCourseAndLessons(course.id)
+            .pipe(
+                tap(() => {
+                    console.log("Deleted course ", course);
+                    this.courseDeleted.emit(course);
+                }),
+                catchError(err => {
+                    console.log(err);
+                    alert("Could not delete course")
+                    return throwError(err);
+                })
+            )
+            .subscribe();
     }
 
 }

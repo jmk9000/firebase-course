@@ -4,12 +4,41 @@ import { Injectable } from "@angular/core";
 import { Course } from '../model/course';
 import { map, concatMap } from 'rxjs/operators';
 import { convertSnaps } from './db-utils';
+import { Lesson } from '../model/lesson';
 
 @Injectable({providedIn: 'root'})
 export class CoursesService {
 
     constructor(private db: AngularFirestore) {
 
+    }
+
+    deleteCourseAndLessons(courseId: string) {
+        return this.db.collection(`courses/${courseId}/lessons`)
+            .get()
+            .pipe(
+                concatMap(results => {
+                    const lessons = convertSnaps<Lesson>(results);
+                    const batch = this.db.firestore.batch();
+                    const courseRef = this.db.doc( `courses/${courseId}`).ref;
+                    //something interesting to note
+                    //the parent ref can be deleted before the nested collection
+                    batch.delete(courseRef);
+
+                    //also take a look at batch.set and batch.update
+
+                    for (let lesson of lessons) {
+                        const lessonRef = this.db.doc(`courses/${courseId}/lessons/${lesson.id}`).ref;
+                        batch.delete(lessonRef);
+                    }
+
+                    return from(batch.commit());
+                })
+            )
+    }
+
+    deleteCourse(courseId: string): Observable<any> {
+        return from(this.db.doc(`courses/${courseId}`).delete());
     }
 
     updateCourse(courseId: string, changes: Partial<Course>): Observable<any> {
