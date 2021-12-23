@@ -1,17 +1,31 @@
+import { Course } from './../model/course';
 import { from, Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from "@angular/core";
-import { Course } from '../model/course';
 import { map, concatMap } from 'rxjs/operators';
 import { convertSnaps } from './db-utils';
 import { Lesson } from '../model/lesson';
 
 @Injectable({providedIn: 'root'})
 export class CoursesService {
-
-    constructor(private db: AngularFirestore) {
+        constructor(private db: AngularFirestore) {
 
     }
+
+    //need to also allow to return observable of null
+    //in case this method doesn't find the course
+    findCourseByUrl(courseUrl: string): Observable<Course | null> {
+        return this.db.collection('courses',
+            ref => ref.where('url', '==', courseUrl))
+            .get()
+            .pipe(
+                map(results => {
+                    const courses = convertSnaps<Course>(results);
+                    return courses.length == 1 ? courses[0] : null;
+                })
+            )
+    }
+
 
     deleteCourseAndLessons(courseId: string) {
         return this.db.collection(`courses/${courseId}/lessons`)
