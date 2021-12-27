@@ -11,7 +11,7 @@ import OrderByDirection = firebase.firestore.OrderByDirection;
 
 @Injectable({providedIn: 'root'})
 export class CoursesService {
-        constructor(private db: AngularFirestore) {
+    constructor(private db: AngularFirestore) {
 
     }
 
